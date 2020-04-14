@@ -1,0 +1,55 @@
+html,body,#app{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.modifyPassForm .el-form-item__label{
+    font-size: 10px;
+}
+.loginForm .el-input__inner{
+    background: transparent;
+    height: 25px;
+    color: rgb(115,180,255);
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid rgb(115,180,255);
+}
+.el-card__body{
+    padding: 5px;
+}
+.search-box .el-input__inner{
+    color: #606266;
+    border:1px solid #bfcbd9;
+    text-overflow: ellipsis;
+}
+.search-box .el-input__inner:hover{
+    border-color: #df5749;
+}
+.search-box .el-select .el-input.is-focus .el-input__inner {
+    border-color: #df5749;
+}
+.search-box .el-input__inner:focus {
+    border-color: #df5749;
+}
+.el-menu {
+    border-right: 0;
+}
+
+.el-table td,.el-table th{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.el-table .cell{
+    line-height: 20px;
+}
+.el-menu-item, .el-submenu__title{
+    height: 50px;
+    line-height: 50px;
+}
+.el-tree-node__label{
+    font-size: 5px;
+}
+
+.el-button--mini, .el-button--mini.is-round {
+    padding: 6px 10px;
+}
