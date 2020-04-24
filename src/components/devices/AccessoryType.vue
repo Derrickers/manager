@@ -1,16 +1,16 @@
 <template>
-    <div @keydown.enter="getDeviceErrorCodeList">
+    <div @keydown.enter="getDeviceClassificationList">
         <div>
             <el-row>
-                <el-col :span="9">
-                    <h1>设备故障管理</h1>
+                <el-col :span="6">
+                    <h1>设备分类管理</h1>
                 </el-col>
-                <el-col :span="15">
+                <el-col :span="18">
                     <div class="search-box">
                         <el-row>
-                            <el-col :span="16">
+                            <el-col :span="17">
                                 <el-row>
-                                    <el-col :span="8">
+                                    <el-col :span="6">
                                         <el-select size="small" v-model="requestParams.classification" clearable
                                                    placeholder="设备分类">
                                             <el-option :value="requestParams.classification"
@@ -20,18 +20,22 @@
                                             </el-option>
                                         </el-select>
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="6">
                                         <el-input size="small" v-model="requestParams.code"
-                                                  placeholder="设备故障代码"></el-input>
+                                                  placeholder="设备类型编号"></el-input>
                                     </el-col>
-                                    <el-col :span="8">
+                                    <el-col :span="6">
                                         <el-input size="small" v-model="requestParams.query"
-                                                  placeholder="设备故障描述"></el-input>
+                                                  placeholder="设备类型名称"></el-input>
+                                    </el-col>
+                                    <el-col :span="6">
+                                        <el-input size="small" v-model="requestParams.level"
+                                                  placeholder="设备类型层级"></el-input>
                                     </el-col>
                                 </el-row>
                             </el-col>
-                            <el-col :span="8">
-                                <el-button @click="getDeviceErrorCodeList" type="danger" size="small" class="modify">
+                            <el-col :span="7">
+                                <el-button @click="getDeviceClassificationList" type="danger" size="small" class="modify">
                                     <i class="el-icon-search"></i>
                                     <span>查询</span>
                                 </el-button>
@@ -39,7 +43,7 @@
                                     <i class="el-icon-delete"></i>
                                     <span>清空</span>
                                 </el-button>
-                                <el-button @click="newErrorCodeVisible=true" type="success" size="small">
+                                <el-button @click="newClassificationVisible=true" type="success" size="small">
                                     <i class="el-icon-plus"></i>
                                     <span>新增</span>
                                 </el-button>
@@ -52,8 +56,8 @@
         <div>
             <el-card>
                 <el-table
-                        ref="deviceErrorCodeTableRef"
-                        :data="deviceErrorCodeList"
+                        ref="deviceClassificationTableRef"
+                        :data="deviceClassificationList"
                         tooltip-effect="dark"
                         style="width: 100%"
                         height="500px"
@@ -75,7 +79,7 @@
                         :empty-text="emptyMessage">
                     <el-table-column
                             type="selection"
-                            width="37"
+                            width="40"
                             fixed>
                     </el-table-column>
                     <el-table-column
@@ -86,22 +90,17 @@
                     <el-table-column
                             prop="classification"
                             label="设备类型名称"
-                            width="260">
+                            width="300">
                     </el-table-column>
                     <el-table-column
-                            prop="errorCode"
-                            label="设备故障代码"
-                            width="260">
+                            prop="classificationCode"
+                            label="设备类型编号"
+                            width="310">
                     </el-table-column>
                     <el-table-column
-                            prop="description"
-                            label="设备故障描述"
-                            width="260">
-                    </el-table-column>
-                    <el-table-column
-                            prop="createTime"
-                            label="创建时间"
-                            width="120">
+                            prop="level"
+                            label="设备类型层级"
+                            width="300">
                     </el-table-column>
                     <el-table-column width="160px" label="操作" fixed="right">
                         <template slot-scope="scope">
@@ -109,13 +108,13 @@
                                     size="mini"
                                     type="danger"
                                     class="modify"
-                                    @click="modifyErrorCode(scope.row)"
+                                    @click="modifyClassification(scope.row)"
                             >编辑
                             </el-button>
                             <el-button
                                     size="mini"
                                     type="danger"
-                                    @click="deleteErrorCode(scope.row)"
+                                    @click="deleteClassification(scope.row)"
                             >删除
                             </el-button>
                         </template>
@@ -143,20 +142,21 @@
         </div>
         <el-dialog
                 title="新增设备故障基本信息"
-                :visible.sync="newErrorCodeVisible"
+                :visible.sync="newClassificationVisible"
                 width="32%"
+                @close="newClassificationDialogClose"
         >
             <div class="modify-card-box">
                 <el-card class="box-card">
-                    <el-form :model="newErrorCodeForm" ref="newErrorCodeFormRef" label-width="140px"
-                             :rules="newErrorCodeFormRules" class="modifyPassForm">
+                    <el-form :model="newClassificationForm" ref="newClassificationFormRef" label-width="140px"
+                             :rules="newClassificationFormRules" class="modifyPassForm">
                         <el-form-item
                                 label="设备类型"
                                 prop="classification">
-                            <el-select style="width: 220px" size="small" v-model="newErrorCodeForm.classification"
+                            <el-select style="width: 220px" size="small" v-model="newClassificationForm.classification"
                                        clearable
                                        placeholder="设备分类">
-                                <el-option :value="newErrorCodeForm.classification"
+                                <el-option :value="newClassificationForm.classification"
                                            style="height: auto;width: 200px">
                                     <el-tree :data="treeOptionList" :props="defaultProps"
                                              @node-click="saveNewClassification"></el-tree>
@@ -164,42 +164,42 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item
-                                label="设备故障代码"
-                                prop="errorCode">
-                            <el-input style="width: 220px" size="small" v-model="newErrorCodeForm.errorCode"
+                                label="设备类型编号"
+                                prop="classificationCode">
+                            <el-input style="width: 220px" size="small" v-model="newClassificationForm.classificationCode"
                                       autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item
-                                label="设备故障描述"
-                                prop="description">
-                            <el-input style="width: 220px" size="small" v-model="newErrorCodeForm.description"
+                                label="设备类型层级"
+                                prop="level">
+                            <el-input style="width: 220px" size="small" v-model="newClassificationForm.level"
                                       autocomplete="off"></el-input>
                         </el-form-item>
                     </el-form>
                 </el-card>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button size="small" @click="modifyPassDialogVisible = false">取 消</el-button>
-                <el-button size="small" type="danger" @click="submitNewErrorCode">确 定</el-button>
+                <el-button size="small" @click="newClassificationVisible = false">取 消</el-button>
+                <el-button size="small" type="danger" @click="submitNewClassification">确 定</el-button>
             </span>
         </el-dialog>
         <el-dialog
                 title="设备故障基本信息编辑"
-                :visible.sync="modifyErrorCodeVisible"
+                :visible.sync="modifyClassificationVisible"
                 width="32%"
                 @close="modifyDialogClose"
         >
             <div class="modify-card-box">
                 <el-card class="box-card">
-                    <el-form :model="modifyErrorCodeForm" ref="modifyErrorCodeFormRef" label-width="140px"
-                             :rules="newErrorCodeFormRules">
+                    <el-form :model="modifyClassificationForm" ref="modifyClassificationFormRef" label-width="140px"
+                             :rules="newClassificationFormRules">
                         <el-form-item
                                 label="设备类型"
                                 prop="classification">
-                            <el-select style="width: 220px" size="small" v-model="modifyErrorCodeForm.classification"
+                            <el-select style="width: 220px" size="small" v-model="modifyClassificationForm.classification"
                                        clearable
                                        placeholder="设备分类">
-                                <el-option :value="modifyErrorCodeForm.classification"
+                                <el-option :value="modifyClassificationForm.classification"
                                            style="height: auto;width: 200px">
                                     <el-tree :data="treeOptionList" :props="defaultProps"
                                              @node-click="saveNewClassification"></el-tree>
@@ -207,15 +207,15 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item
-                                label="设备故障代码"
-                                prop="errorCode">
-                            <el-input style="width: 220px" size="small" v-model="modifyErrorCodeForm.errorCode"
+                                label="设备类型编号"
+                                prop="classificationCode">
+                            <el-input style="width: 220px" size="small" v-model="modifyClassificationForm.classificationCode"
                                       autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item
-                                label="设备故障描述"
-                                prop="description">
-                            <el-input style="width: 220px" size="small" v-model="modifyErrorCodeForm.description"
+                                label="设备类型层级"
+                                prop="level">
+                            <el-input style="width: 220px" size="small" v-model="modifyClassificationForm.level"
                                       autocomplete="off"></el-input>
                         </el-form-item>
                     </el-form>
@@ -223,7 +223,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="modifyDialogClose">关 闭</el-button>
-                <el-button size="small" type="danger" @click="submitModifyErrorCode">保 存</el-button>
+                <el-button size="small" type="danger" @click="submitModifyClassification">保 存</el-button>
             </span>
         </el-dialog>
     </div>
@@ -233,12 +233,13 @@
     export default {
         data() {
             return {
-                deviceErrorCodeList: [],
+                deviceClassificationList: [],
                 requestParams: {
                     "page": 1,
-                    "size": 20,
+                    "size": 10,
                     "query": "",
                     "code": "",
+                    'level':'',
                     'classification': '',
                 },
                 emptyMessage: '未找到匹配记录',
@@ -251,25 +252,25 @@
                     children: 'children',
                     label: 'label'
                 },
-                newErrorCodeVisible: false,
-                modifyErrorCodeVisible: false,
-                newErrorCodeForm: {
+                newClassificationVisible: false,
+                modifyClassificationVisible: false,
+                newClassificationForm: {
                     classification: '',
-                    errorCode: '',
-                    description: ''
+                    classificationCode: '',
+                    level: ''
                 },
-                modifyErrorCodeForm: {
+                modifyClassificationForm: {
                     id: 0,
                     classification: '',
-                    errorCode: '',
-                    description: ''
+                    classificationCode: '',
+                    level:''
                 },
-                newErrorCodeFormRules: {
-                    errorCode: [
+                newClassificationFormRules: {
+                    classificationCode: [
                         {required: true, message: '请输入故障代码', trigger: 'blur'}
                     ],
-                    description: [
-                        {required: true, message: '请输入故障描述', trigger: 'blur'}
+                    level: [
+                        {required: true, message: '请输入故障描述', trigger: 'blur'},
                     ]
                 }
             }
@@ -298,11 +299,11 @@
             changeCurrentPage(val) {
                 this.requestParams.page = val;
             },
-            async getDeviceErrorCodeList() {
-                const {data: res} = await this.$http.get("device/errorCode", {params: this.requestParams});
+            async getDeviceClassificationList() {
+                const {data: res} = await this.$http.get("device/classification", {params: this.requestParams});
                 if (res.meta.code !== 200)
                     return this.$message.error(res.meta.message);
-                this.deviceErrorCodeList = res.data.data;
+                this.deviceClassificationList = res.data.data;
                 this.pagination.pagenum = res.data.pagenum;
                 this.pagination.total = res.data.total;
             },
@@ -314,60 +315,74 @@
             }
             ,
             saveClassification(val) {
-                if (!val.children)
-                    this.requestParams.classification = val.label;
+                this.requestParams.classification = val.label;
             },
             saveNewClassification(val) {
-                if (!val.children)
-                    this.newErrorCodeForm.classification = val.label;
+                this.newClassificationForm.classification = val.label;
             },
-            async submitNewErrorCode() {
-                const {data: res} = await this.$http.post("/device/newErrorCode", this.newErrorCodeForm);
-                if (res.meta.code !== 200)
-                    return this.$message.error(res.meta.message);
-                this.newErrorCodeVisible = false;
-                this.getDeviceErrorCodeList();
-                this.clearErrorCodeForm();
+            async submitNewClassification() {
+                this.$refs.newClassificationFormRef.validate(async valid => {
+                    if (!valid) {
+                        this.$message.error("新增失败")
+                        return;
+                    }
+                    const {data: res} = await this.$http.post("/device/newClassification", this.newClassificationForm);
+                    if (res.meta.code !== 200)
+                        return this.$message.error(res.meta.message);
+                    this.newClassificationVisible=false;
+                    this.getDeviceClassificationList();
+                });
+
             },
-            async submitModifyErrorCode() {
-                const {data: res} = await this.$http.post("/device/modifyErrorCode", this.modifyErrorCodeForm);
-                if (res.meta.code !== 200)
-                    this.$message.error(res.meta.message);
-                this.modifyDialogClose()
+            async submitModifyClassification() {
+                this.$refs.modifyClassificationFormRef.validate(async valid => {
+                    if (!valid) {
+                        this.$message.error("修改失败")
+                        return;
+                    }
+                    const {data: res} = await this.$http.post("/device/modifyClassification", this.modifyClassificationForm);
+                    if (res.meta.code !== 200)
+                        this.$message.error(res.meta.message);
+                    this.modifyDialogClose()
+                });
             },
-            async deleteErrorCode(row) {
-                this.$messagebox.confirm('此操作将永久删除该故障代码, 是否继续?', '提示', {
+            async deleteClassification(row) {
+                this.$messagebox.confirm('此操作将永久删除该设备分类, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(async() => {
-                    const {data:res} = await this.$http.post("/device/deleteErrorCode",{id:row.id});
+                    const {data:res} = await this.$http.post("/device/deleteClassification",{id:row.id});
                     if(res.meta.code!==200)
                         return this.$message.error(res.meta.message);
-                    this.getDeviceErrorCodeList()
+                    this.getDeviceClassificationList()
                 }).catch(() => {
                 });
             },
-            clearErrorCodeForm() {
-                this.newErrorCodeForm.description = '';
-                this.newErrorCodeForm.errorCode = '';
-                this.newErrorCodeForm.classification = '';
-            },
-            modifyErrorCode(row) {
-                this.modifyErrorCodeVisible = true;
-                this.modifyErrorCodeForm.id = row.id;
-                this.modifyErrorCodeForm.classification = row.classification;
-                this.modifyErrorCodeForm.description = row.description;
-                this.modifyErrorCodeForm.errorCode = row.errorCode;
+            modifyClassification(row) {
+                this.modifyClassificationVisible = true;
+                this.modifyClassificationForm.id = row.id;
+                this.modifyClassificationForm.classification = row.classification;
+                this.modifyClassificationForm.classificationCode = row.classificationCode;
+                this.modifyClassificationForm.level = row.level;
             },
             modifyDialogClose() {
-                this.getDeviceErrorCodeList();
-                this.modifyErrorCodeVisible = false;
-                this.clearErrorCodeForm();
+                this.getDeviceClassificationList();
+                this.modifyClassificationVisible = false;
+                this.modifyClassificationForm.classification='';
+                this.modifyClassificationForm.classificationCode='';
+                this.modifyClassificationForm.level='';
+            },
+            newClassificationDialogClose(){
+                this.getDeviceClassificationList();
+                this.newClassificationVisible=false;
+                this.newClassificationForm.classification='';
+                this.newClassificationForm.classificationCode='';
+                this.newClassificationForm.level='';
             }
         },
         created() {
-            this.getDeviceErrorCodeList();
+            this.getDeviceClassificationList();
             this.getTreeOptionList();
         }
     }

@@ -25,7 +25,8 @@
                             :collapse="isCollapse"
                             :default-active="activeIndex"
                             background-color="#fafafa"
-                            text-color="#848484">
+                            text-color="#848484"
+                            unique-opened>
                         <el-menu-item index="/welcome" key="0" @click="saveNavState('/welcome')">
                             <i class="el-icon-s-data"></i>
                             <span slot="title">首页统计</span>
@@ -222,13 +223,9 @@
                 margin-right: 18px;
             }
         }
-
-        .el-aside {
-            background-color: white;
-            height: 100%;
-        }
         .el-main{
             height: 100%;
+            background-color: #f7f7f7;
         }
         .modify-card-box {
             border: 1px solid grey;

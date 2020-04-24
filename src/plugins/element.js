@@ -26,7 +26,8 @@ import {
     Option,
     Tree,
     Cascader,
-    DatePicker
+    DatePicker,
+    MessageBox
 } from 'element-ui'
 
 
@@ -57,5 +58,6 @@ Vue.use(Tree)
 Vue.use(Cascader)
 Vue.use(DatePicker)
 Vue.prototype.$message=Message
+Vue.prototype.$messagebox = MessageBox
 
 

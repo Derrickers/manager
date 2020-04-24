@@ -7,6 +7,9 @@ import Servers from "@/components/servers/Servers";
 import Repairs from "@/components/workOrders/Repairs";
 import Detects from "@/components/workOrders/Detects";
 import DeviceErrorCode from "@/components/devices/DeviceErrorCode";
+import DeviceClassification from "@/components/devices/DeviceClassification";
+import AssetDevice from "@/components/devices/AssetDevice";
+import AccessoryType from "@/components/devices/AccessoryType";
 Vue.use(VueRouter)
 
 const routes = [
@@ -25,6 +28,9 @@ const routes = [
       {path:'/repairs',component:Repairs},
       {path:'/detects',component:Detects},
       {path:'/codes',component:DeviceErrorCode},
+      {path:'/classification',component:DeviceClassification},
+      {path:'/asset',component:AssetDevice},
+      {path:'/accessoryType',component:AccessoryType},
     ]
   }
 ]
