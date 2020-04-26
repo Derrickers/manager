@@ -121,7 +121,6 @@
                         :page-sizes="[10, 20]"
                         @size-change="changePageSize"
                 >
-
                 </el-pagination>
                 <el-pagination
                         :hide-on-single-page="true"

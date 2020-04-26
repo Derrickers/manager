@@ -390,7 +390,7 @@
                                         <el-option :value="modifyAssetDeviceForm.affiliation"
                                                    style="height: auto;width: auto">
                                             <el-tree :data="affiliationTreeList" :props="defaultProps"
-                                                     @node-click="saveNewAffiliation"></el-tree>
+                                                     @node-click="saveModifyAffiliation"></el-tree>
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
@@ -406,7 +406,7 @@
                                         <el-option :value="modifyAssetDeviceForm.classification"
                                                    style="height: auto;width: auto">
                                             <el-tree :data="treeOptionList" :props="defaultProps"
-                                                     @node-click="saveNewClassification"></el-tree>
+                                                     @node-click="saveModifyClassification"></el-tree>
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
@@ -678,6 +678,13 @@
             saveNewClassification(val) {
                 if (!val.children)
                     this.newAssetDeviceForm.classification = val.label;
+            },saveModifyAffiliation(val) {
+                if (!val.children)
+                    this.newAssetDeviceForm.affiliation = val.label;
+            },
+            saveModifyClassification(val) {
+                if (!val.children)
+                    this.newAssetDeviceForm.classification = val.label;
             },
             async submitNewAssetDevice() {
                 this.$refs.newAssetDeviceFormRef.validate(async valid => {
@@ -739,12 +746,12 @@
             modifyDialogClose() {
                 this.getDeviceGoodsList();
                 this.modifyAssetDeviceVisible = false;
-                this.$refs.modifyAssetDeviceFormRef.resetField();
+                this.$refs.modifyAssetDeviceFormRef.resetFields();
             },
             newAssetDeviceDialogClose() {
                 this.getDeviceGoodsList();
                 this.newAssetDeviceVisible = false;
-                this.$refs.newAssetDeviceFormRef.resetField();
+                this.$refs.newAssetDeviceFormRef.resetFields();
             }
         },
         created() {

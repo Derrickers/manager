@@ -10,6 +10,9 @@ import DeviceErrorCode from "@/components/devices/DeviceErrorCode";
 import DeviceClassification from "@/components/devices/DeviceClassification";
 import AssetDevice from "@/components/devices/AssetDevice";
 import AccessoryType from "@/components/devices/AccessoryType";
+import AccessoryDevice from "@/components/devices/AccessoryDevice";
+import UnAssetType from "@/components/devices/UnAssetType";
+import UnAssetDevice from "@/components/devices/UnAssetDevice";
 Vue.use(VueRouter)
 
 const routes = [
@@ -31,6 +34,9 @@ const routes = [
       {path:'/classification',component:DeviceClassification},
       {path:'/asset',component:AssetDevice},
       {path:'/accessoryType',component:AccessoryType},
+      {path:'/accessoryDevice',component:AccessoryDevice},
+      {path:'/unAssetType',component:UnAssetType},
+      {path:'/unAssetDevice',component:UnAssetDevice},
     ]
   }
 ]
