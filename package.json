@@ -12,7 +12,7 @@
     "core-js": "^3.6.4",
     "el-select-tree": "^1.0.14",
     "element-ui": "^2.4.5",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
     "vue": "^2.6.11",
